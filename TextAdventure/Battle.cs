@@ -82,7 +82,7 @@ namespace TextAdventure
                             {
                                 Dialogue.TimedDialogue(new string[] {
                                     $"$col$dYou killed {(enemy.boss? "":"the ")}{enemy.name}!",
-                                    $"$col$You gained absolutely nothing!"
+                                    $"$col$dYou gained absolutely nothing!"
                                 });
                             }
 

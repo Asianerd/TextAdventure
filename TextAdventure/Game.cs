@@ -18,7 +18,7 @@ namespace TextAdventure
                 "$col$dPlease enter either 'attack','shield' or 'heal' as moves.",
                 "$col$dThis game is a turn-based strategy game",
                 "$col$dThere are various weapons and accessories to be used too.",
-            },0);
+            });
 
             //player.effects.Add(new Effects(Effects.EffectEnum.Burning, 3));
             player.PrintStats();
