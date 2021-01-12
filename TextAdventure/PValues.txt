@@ -1,0 +1,27 @@
+﻿Values (to be modified by effects/acessories)
+{
+	Health
+	{
+		Additions
+			- Max health
+		Multipliers and Additions
+			- Regen
+	}
+
+
+	Mana
+	{
+		Additions
+			- Max mana
+		Multipliers
+			- Usage
+		Multipliers and Additions
+			- Regen
+	}
+
+	Damage
+	{
+		Multipliers
+			- Total damage dealt
+	}
+}

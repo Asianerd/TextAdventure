@@ -1,0 +1,7 @@
+C:\Users\ironr\source\repos\TextAdventure\TextAdventure\obj\Debug\TextAdventure.csprojAssemblyReference.cache
+C:\Users\ironr\source\repos\TextAdventure\TextAdventure\obj\Debug\TextAdventure.csproj.CoreCompileInputs.cache
+C:\Users\ironr\source\repos\TextAdventure\TextAdventure\bin\Debug\TextAdventure.exe.config
+C:\Users\ironr\source\repos\TextAdventure\TextAdventure\bin\Debug\TextAdventure.exe
+C:\Users\ironr\source\repos\TextAdventure\TextAdventure\bin\Debug\TextAdventure.pdb
+C:\Users\ironr\source\repos\TextAdventure\TextAdventure\obj\Debug\TextAdventure.exe
+C:\Users\ironr\source\repos\TextAdventure\TextAdventure\obj\Debug\TextAdventure.pdb
