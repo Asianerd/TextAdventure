@@ -48,20 +48,11 @@ namespace TextAdventure
             dead = health <= 0;
         }
 
-        public void PrintStats()
-        {
-            Dialogue.TimedDialogue(new string[] {
-            $"Name : {name}",
-            $"  HP : {health}/{maxHealth}",
-            $" ATK : {damage}"
-            }, 0);
-        }
-
         public string[] GetStats()
         {
             return new string[]
             {
-                $"{name}",
+                $" {name}",
                 $"  HP : {health}/{maxHealth}",
                 $" ATK : {damage}"
             };
@@ -85,48 +76,66 @@ namespace TextAdventure
 
         public static void PrintStats(Enemy[] enemies)
         {
-            List<string>[] end = new List<string>[]
-            {
-                new List<string>(),
-                new List<string>(),
-                new List<string>()
-            };
+            /*            List<string>[] end = new List<string>[]
+                        {
+                            new List<string>(),
+                            new List<string>(),
+                            new List<string>()
+                        };
 
-            foreach(Enemy i in RemoveDead(enemies))
-            {
-                for (int ii = 0; ii < 3; ii++)
-                {
-                    end[ii].Add(EndString(i.GetStats())[ii]);
-                }
-            }
+                        foreach(Enemy i in RemoveDead(enemies))
+                        {
+                            for (int ii = 0; ii < 3; ii++)
+                            {
+                                end[ii].Add(EndString(i.GetStats())[ii]);
+                            }
+                        }
 
 
-            int barLength = end[0].Select(n => n.Length).Sum();
+                        int barLength = end[0].Select(n => n.Length).Sum();
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine($"          /{new string('-',barLength-1)}\\");
+                        foreach (List<string> i in end)
+                        {
+                            Console.Write("          |");
+                            foreach(string ii in i)
+                            {
+                                Console.Write(ii);
+                            }
+                            Console.WriteLine();
+                        }
+                        Console.WriteLine($"          \\{new string('-', barLength - 1)}/");
+                        Console.ForegroundColor = ConsoleColor.White;
+
+                        string[] EndString(string[] inStr)
+                        {
+                            int finLength = inStr.Max(n => n.Length);
+
+                            List<string> outStr = new List<string>();
+                            foreach (string x in inStr)
+                            {
+                                outStr.Add($" {x}{new string(' ', finLength - x.Length + 1)}|");
+                            }
+                            return outStr.ToArray();
+                        }*/
+
+            string[][] _enemyStats = RemoveDead(enemies).Select(n => n.GetStats()).ToArray();
+
+            List<List<string>> final = Dialogue.BoxText(_enemyStats, join: true);
+
             Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"          /{new string('-',barLength-1)}\\");
-            foreach (List<string> i in end)
+            Console.WriteLine($"         /{new string('-', string.Join(" | ",final[0]).Length+2)}\\");
+            foreach(List<string> i in final)
             {
-                Console.Write("          |");
+                Console.Write("         | ");
                 foreach(string ii in i)
                 {
-                    Console.Write(ii);
+                    Console.Write($"{ii} | ");
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine($"          \\{new string('-', barLength - 1)}/");
+            Console.WriteLine($"         \\{new string('-', string.Join(" | ", final[0]).Length+2)}/");
             Console.ForegroundColor = ConsoleColor.White;
-
-            string[] EndString(string[] inStr)
-            {
-                int finLength = inStr.Max(n => n.Length);
-
-                List<string> outStr = new List<string>();
-                foreach (string x in inStr)
-                {
-                    outStr.Add($" {x}{new string(' ', finLength - x.Length + 1)}|");
-                }
-                return outStr.ToArray();
-            }
         }
     }
 }

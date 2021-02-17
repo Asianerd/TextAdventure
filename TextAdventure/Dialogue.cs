@@ -67,5 +67,156 @@ namespace TextAdventure
             Console.WriteLine(text);
             Console.ForegroundColor = ConsoleColor.White;
         }
+
+        public static string BoxText(string[][] stringsIn, string joiner = " | ",Orientation orientation = Orientation.Vertical)
+        {
+            string finalString = "";
+            List<List<string>> stringsProcessed = new List<List<string>>();
+            List<List<string>> final = new List<List<string>>();
+
+            //Replaces each string in all of the given lists with Endstring() (the one with the spaces)
+            foreach (string[] i in stringsIn)
+            {
+                List<string> _finalElement = new List<string>();
+                foreach (string ii in EndString(i))
+                {
+                    _finalElement.Add(ii);
+                }
+                stringsProcessed.Add(_finalElement);
+            }
+
+            switch (orientation)
+            {
+                case Orientation.Vertical:
+                    //Adds them all together accordingly
+                    for (int i = 0; i < stringsProcessed[0].Count; i++)
+                    {
+                        List<string> _finalElement = new List<string>();
+                        foreach (List<string> ii in stringsProcessed)
+                        {
+                            _finalElement.Add(ii[i]);
+                        }
+                        final.Add(_finalElement);
+                    }
+
+                    //Joining all the lists together
+                    finalString = string.Join("\n", final.Select(n => string.Join(joiner, n)));
+                    break;
+
+                case Orientation.Horizontal:
+                    //Adds them all together accordingly
+                    for (int i = 0; i < stringsProcessed[0].Count; i++)
+                    {
+                        List<string> _finalElement = new List<string>();
+                        foreach (List<string> ii in stringsProcessed)
+                        {
+                            _finalElement.Add(ii[i]);
+                        }
+                        final.Add(_finalElement);
+                    }
+
+                    //Joining all the lists together
+                    finalString = string.Join("\n", final.Select(n => string.Join(joiner, n)));
+                    break;
+            }
+
+            return finalString;
+
+            List<string> EndString(string[] InStr)
+            {
+                List<string> _final = new List<string>();
+                int totalLength = InStr.Max(n => n.Length);
+
+                foreach (string _x in InStr)
+                {
+                    _final.Add($"{_x}{new string(' ', totalLength - _x.Length)}");
+                }
+
+                return _final;
+            }
+        }
+
+        public static List<List<string>> BoxText(string[][] stringsIn, bool join = false, string joiner = "|", Orientation orientation = Orientation.Vertical)
+        {
+            string finalString = "";
+            List<List<string>> stringsProcessed = new List<List<string>>();
+            List<List<string>> final = new List<List<string>>();
+
+            //Replaces each string in all of the given lists with Endstring() (the one with the spaces)
+            foreach (string[] i in stringsIn)
+            {
+                List<string> _finalElement = new List<string>();
+                foreach (string ii in EndString(i))
+                {
+                    _finalElement.Add(ii);
+                }
+                stringsProcessed.Add(_finalElement);
+            }
+
+            switch (orientation)
+            {
+                case Orientation.Vertical:
+                    //Adds them all together accordingly
+                    for (int i = 0; i < stringsProcessed[0].Count; i++)
+                    {
+                        List<string> _finalElement = new List<string>();
+                        foreach (List<string> ii in stringsProcessed)
+                        {
+                            _finalElement.Add(ii[i]);
+                        }
+                        final.Add(_finalElement);
+                    }
+
+                    //Joining all the lists together
+                    finalString = string.Join("\n", final.Select(n => string.Join(joiner, n)));
+                    break;
+
+                case Orientation.Horizontal:
+                    //Adds them all together accordingly
+                    for (int i = 0; i < stringsProcessed[0].Count; i++)
+                    {
+                        List<string> _finalElement = new List<string>();
+                        foreach (List<string> ii in stringsProcessed)
+                        {
+                            _finalElement.Add(ii[i]);
+                        }
+                        final.Add(_finalElement);
+                    }
+
+                    //Joining all the lists together
+                    finalString = string.Join("\n", final.Select(n => string.Join(joiner, n)));
+                    break;
+            }
+
+            return final;
+
+            List<string> EndString(string[] InStr)
+            {
+                List<string> _final = new List<string>();
+                int totalLength = InStr.Max(n => n.Length);
+
+                foreach (string _x in InStr)
+                {
+                    _final.Add($"{_x}{new string(' ', totalLength - _x.Length)}");
+                }
+
+                return _final;
+            }
+        }
+
+        public enum Orientation
+        {
+            // Vertical = First element goes vertically
+            /* A1 B1 C1
+             * A2 B2 C2
+             * A3 B3 C3 */
+
+            // Horizontal = First element goes horizontally
+            /* A1 A2 A3
+             * B1 B2 B3
+             * C1 C2 C3 */
+            Vertical,
+            Horizontal
+        }
     }
 }
