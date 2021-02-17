@@ -13,65 +13,74 @@ namespace TextAdventure
 
         public class Health
         {
-            public static Health none = new Health(0, 0, 1);
-            public Health(double AMaxHealth,double ARegen, double MRegen)
+            public static Health none = new Health(0, 0, 0, 0);
+            public Health(double AMaxHealth,double ARegen,double MMaxHealth, double MRegen)
             {
                 maxHealth = AMaxHealth;
                 regenAddition = ARegen;
 
+                maxHealthMultiplier = MMaxHealth;
                 regenMultiplier = MRegen;
             }
 
             // Additions
-            public double maxHealth = 0;
-            public double regenAddition = 0;
+            public double maxHealth;
+            public double regenAddition;
 
             // Multipliers
-            public double regenMultiplier = 1;
+            public double maxHealthMultiplier;
+            public double regenMultiplier;
         }
 
         public class Mana
         {
-            public static Mana none = new Mana(0,1,1,1);
-            public Mana(double AMaxMana,double ARegen,double MUsage, double MRegen)
+            public static Mana none = new Mana(0, 0, 0, 0, 0, 0);
+            public Mana(double AMaxMana, double AUsage, double ARegen, double MMaxMana, double MUsage, double MRegen)
             {
                 maxMana = AMaxMana;
+                usageAddition = AUsage;
                 regenAddition = ARegen;
 
-                usage = MUsage;
+                maxManaMultiplier = MMaxMana;
+                usageMultiplier = MUsage;
                 regenMultiplier = MRegen;
             }
 
             // Additions
-            public double maxMana = 0;
-            public double regenAddition = 0;
+            public double maxMana;
+            public double usageAddition;
+            public double regenAddition;
 
             // Multipliers
-            public double usage = 1;
-            public double regenMultiplier = 1;
+            public double maxManaMultiplier;
+            public double usageMultiplier;
+            public double regenMultiplier;
         }
 
         public class Damage
         {
-            public static Damage none = new Damage(1);
-            public Damage(double MDamage)
+            public static Damage none = new Damage(0, 0);
+            public Damage(double ADamage, double MDamage)
             {
+                damageAddition = ADamage;
                 damageMultiplier = MDamage;
             }
+            // Addition
+            public double damageAddition;
             // Multipliers
-            public double damageMultiplier = 1;
+            public double damageMultiplier;
         }
 
         public class Defence
         {
-            public static Defence none = new Defence(0,1);
+            public static Defence none = new Defence(0, 0);
             public Defence(double ADefence,double MDefence)
             {
-                defence = ADefence;
+                defenceAddition = ADefence;
                 defenceMultiplier = MDefence;
             }
             // Additions
-            public double defence;
+            public double defenceAddition;
             // Multipliers
             public double defenceMultiplier;
         }
@@ -91,33 +100,97 @@ namespace TextAdventure
             defenceMod = DefenceClass;
         }
 
-/*        public void GetFinalMod(modClass ClassWanted, modType TypeWanted)
+        public enum ModType
         {
-            double total = 0;
-            int typeWanted = (int)TypeWanted;
-            switch((int)ClassWanted)
+            MaxHealth,
+            HealthRegen,
+
+            MaxMana,
+            ManaUsage,
+            ManaRegen,
+
+            Damage,
+
+            Defence
+        }
+
+        public static double GetFinalMod(double baseValue, List<PlayerValueModifier> values,ModType type)
+        {
+            // yea code looks ugly but its so that it doesnt have to run a switch statement for each equipped item of the player
+            double final;
+            double addTotal = 0, multiTotal = 0;
+            if (values.Count > 0)
             {
-                default:
-                    if(typeWanted == 0)
-                    {
-
-                    }
-                    break;
+                switch (type)
+                {
+                    default:
+                        break;
+                    #region Health
+                    case ModType.MaxHealth:
+                        foreach (PlayerValueModifier x in values)
+                        {
+                            addTotal += x.healthMod.maxHealth;
+                            multiTotal += x.healthMod.maxHealthMultiplier;
+                        }
+                        break;
+                    case ModType.HealthRegen:
+                        foreach (PlayerValueModifier x in values)
+                        {
+                            addTotal += x.healthMod.regenAddition;
+                            multiTotal += x.healthMod.regenMultiplier;
+                        }
+                        break;
+                    #endregion
+                    #region Mana
+                    case ModType.MaxMana:
+                        foreach (PlayerValueModifier x in values)
+                        {
+                            addTotal += x.manaMod.maxMana;
+                            multiTotal += x.manaMod.maxManaMultiplier;
+                        }
+                        break;
+                    case ModType.ManaUsage:
+                        foreach (PlayerValueModifier x in values)
+                        {
+                            addTotal += x.manaMod.usageAddition;
+                            multiTotal += x.manaMod.usageMultiplier;
+                        }
+                        break;
+                    case ModType.ManaRegen:
+                        foreach (PlayerValueModifier x in values)
+                        {
+                            addTotal += x.manaMod.regenAddition;
+                            multiTotal += x.manaMod.regenMultiplier;
+                        }
+                        break;
+                    #endregion
+                    #region Damage
+                    case ModType.Damage:
+                        foreach (PlayerValueModifier x in values)
+                        {
+                            addTotal += x.damageMod.damageAddition;
+                            multiTotal += x.damageMod.damageMultiplier;
+                        }
+                        break;
+                    #endregion
+                    #region Defence
+                    case ModType.Defence:
+                        foreach (PlayerValueModifier x in values)
+                        {
+                            addTotal += x.defenceMod.defenceAddition;
+                            multiTotal += x.defenceMod.defenceMultiplier;
+                        }
+                        break;
+                        #endregion
+                }
             }
+            else
+            {
+                addTotal = 0;
+                multiTotal = 1;
+            }
+            final = addTotal + (baseValue * multiTotal);
+            return final;
         }
-
-        public enum modClass
-        {
-            Health,
-            Mana,
-            Damage
-        }
-
-        public enum modType
-        {
-            Addition,
-            Multiplier,
-            Both
-        }*/
     }
 }
