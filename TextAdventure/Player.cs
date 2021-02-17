@@ -30,13 +30,13 @@ namespace TextAdventure
 
         public double MaxHealth(bool raw = false)
         {
-            if(raw)
+            if (raw)
             {
                 return maxHealth;
             }
             else
             {
-                return Accessory.GetFinal("maxHealth") + maxHealth;
+                return PlayerValueModifier.GetFinalMod(baseDamage, new List<PlayerValueModifier>(Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.Damage);
             }
         }
         public double MaxMana(bool raw = false)
@@ -47,7 +47,7 @@ namespace TextAdventure
             }
             else
             {
-                return Accessory.GetFinal("maxMana") + maxMana;
+                return PlayerValueModifier.GetFinalMod(maxMana, new List<PlayerValueModifier>(Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.MaxMana);
             }
         }
         public double Damage(bool raw = false)
@@ -58,19 +58,19 @@ namespace TextAdventure
             }
             else
             {
-                return Accessory.GetFinal("damage") + baseDamage;
+                return PlayerValueModifier.GetFinalMod(baseDamage,new List<PlayerValueModifier>(Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.Damage);
             }
         }
 
         public double HealManaUse(bool raw = false)
         {
-            if(raw)
+            if (raw)
             {
                 return healManaUsage;
             }
             else
             {
-                return Accessory.GetFinal("manaUse") * healManaUsage;
+                return PlayerValueModifier.GetFinalMod(healManaUsage,new List<PlayerValueModifier>(Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.ManaUsage);
             }
         }
 
@@ -92,11 +92,6 @@ namespace TextAdventure
 
         public void PrintStats()
         {
-            /*string effects = "";
-            foreach(Effects x in Instance.effects)
-            {
-                effects += $";[{x.age}]:{x.name}; ";
-            }*/
             string effects = string.Join("",Instance.effects.Select(n => $";[{n.age}]:{n.name}; "));
             string[] stats =
             {
@@ -107,6 +102,16 @@ namespace TextAdventure
                 $"{new string('-',25)}\n",
             };
             Dialogue.TimedDialogue(stats, 0);
+        }
+
+        public void PrintAcessories()
+        {
+            Console.WriteLine();
+            foreach(Accessory x in accessories)
+            {
+                Console.WriteLine($"{x.acessoryItem.name}");
+            }
+            Console.WriteLine();
         }
     }
 }

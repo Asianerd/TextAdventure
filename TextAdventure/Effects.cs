@@ -27,28 +27,28 @@ namespace TextAdventure
 
         public Effects(EffectEnum EffectType,int Duration)
         {
-            switch((int)EffectType)
+            switch(EffectType)
             {
                 default:
                     value = PlayerValueModifier.none;
                     break;
-                case 3:
+                case EffectEnum.Weakness:
                     value = new PlayerValueModifier(
                         PlayerValueModifier.Health.none,
                         PlayerValueModifier.Mana.none,
-                        new PlayerValueModifier.Damage(0.5),
+                        new PlayerValueModifier.Damage(0,0.5),
                         new PlayerValueModifier.Defence(0,0.5)
                         );
                     break;
-                case 4:
+                case EffectEnum.Strength:
                     value = new PlayerValueModifier(
                         PlayerValueModifier.Health.none,
                         PlayerValueModifier.Mana.none,
-                        new PlayerValueModifier.Damage(2),
+                        new PlayerValueModifier.Damage(0,2),
                         PlayerValueModifier.Defence.none
                         );
                     break;
-                case 5:
+                case EffectEnum.Toughness:
                     value = new PlayerValueModifier(
                         PlayerValueModifier.Health.none,
                         PlayerValueModifier.Mana.none,
@@ -85,11 +85,11 @@ namespace TextAdventure
                     break;
                 case 1:
                     Player.Instance.AffectHealth(-5);
-                    effectMessage = $"The fire hurts you! {Player.Instance.health + 5} => {Player.Instance.health}/{Player.Instance.MaxHealth()}HP";
+                    effectMessage = $"The fire hurts you! {Player.Instance.health + 5} => {Player.Instance.health}/{Player.Instance.health}HP";
                     break;
                 case 2:
                     Player.Instance.AffectHealth(-3);
-                    effectMessage = $"The poison hurts you! {Player.Instance.health + 3} => {Player.Instance.health}/{Player.Instance.MaxHealth()}HP";
+                    effectMessage = $"The poison hurts you! {Player.Instance.health + 3} => {Player.Instance.health}/{Player.Instance.health}HP";
                     break;
             }
             return effectMessage;
