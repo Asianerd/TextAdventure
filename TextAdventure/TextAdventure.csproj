@@ -52,6 +52,7 @@
     <Compile Include="Effects.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Item.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerValueModifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
