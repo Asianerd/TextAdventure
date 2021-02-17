@@ -19,21 +19,10 @@ namespace TextAdventure
 
         public static Battle Instance = new Battle();
 
-        Enemy[] enemies;
-
         public void Start(Enemy[] Enemies)
         {
-            enemies = Enemies;
             while (Enemy.RemoveDead(Enemies).Length > 0)
             {
-                /*if (RemoveDead(Enemies).Length == 1)
-                {
-                    Fight(RemoveDead(Enemies)[0]);
-                }
-                else
-                {
-                    Fight(ChooseEnemy(RemoveDead(enemies)));
-                }*/
                 Fight(Enemies);
             }
         }
