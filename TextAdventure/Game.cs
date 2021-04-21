@@ -8,6 +8,10 @@ namespace TextAdventure
 {
     class Game
     {
+        // Development related changes:
+        /* Intro dialogue delay set to 0
+         * Printing accessories at start of game
+         */
         public static Player player = Player.Instance;
         static void Main(string[] args)
         {
@@ -28,6 +32,7 @@ namespace TextAdventure
                     new PlayerValueModifier.Damage(0, 0.5),
                     PlayerValueModifier.Defence.none
                     )));
+            player.accessories.Add(new Accessory(new Item("Rabbit's ear", Item.ItemType.Accessory, Item.RarityEnum.Legendary), new PlayerValueModifier(new PlayerValueModifier.Health(1000, 20, 2, 2), new PlayerValueModifier.Mana(1000, 0, 20, 1, 0.5, 5), new PlayerValueModifier.Damage(50, 2), new PlayerValueModifier.Defence(20, 5))));
             player.PrintAcessories();
             Enemy[] enemies = new Enemy[] { new Enemy("Spider", 10, 3), new Enemy("Moon Lord", 10, 10, Boss: true) };
             Battle.Instance.Start(enemies);

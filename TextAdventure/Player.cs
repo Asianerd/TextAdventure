@@ -16,17 +16,16 @@ namespace TextAdventure
         public List<Accessory> accessories = new List<Accessory>();
         public List<Effects> effects = new List<Effects>();
         public Weapon currentWeapon;
+        public Spell currentSpell = Spell.spells[0]; // Regeneration spell
 
         public double health = 100;
         private double maxHealth = 100;
 
-        public double mana = 20;
-        private double maxMana = 20;
+        public double mana = 100;
+        private double maxMana = 100;
 
         private double baseDamage = 5;
 
-        private double healManaUsage = 20;
-        public double healHealthGain = 50;
 
         public double MaxHealth(bool raw = false)
         {
@@ -36,7 +35,7 @@ namespace TextAdventure
             }
             else
             {
-                return PlayerValueModifier.GetFinalMod(baseDamage, new List<PlayerValueModifier>(Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.Damage);
+                return PlayerValueModifier.GetFinalMod(health, new List<PlayerValueModifier>(Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.MaxHealth);
             }
         }
         public double MaxMana(bool raw = false)
@@ -62,15 +61,15 @@ namespace TextAdventure
             }
         }
 
-        public double HealManaUse(bool raw = false)
+        public double SpellManaUsage(bool raw = false)
         {
             if (raw)
             {
-                return healManaUsage;
+                return currentSpell.manaUsage;
             }
             else
             {
-                return PlayerValueModifier.GetFinalMod(healManaUsage,new List<PlayerValueModifier>(Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.ManaUsage);
+                return PlayerValueModifier.GetFinalMod(currentSpell.manaUsage, new List<PlayerValueModifier>(Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.ManaUsage);
             }
         }
 
@@ -96,8 +95,8 @@ namespace TextAdventure
             string[] stats =
             {
                 $"\n{new string('-',25)}",
-                $"  Health : {MaxHealth()}/{maxHealth}      {(effects.Length>=1?($"Effects : {effects}"):(""))}",
-                $"  Mana   : {MaxMana()}/{maxMana}",
+                $"  Health : {health}/{maxHealth}      {(effects.Length>=1?($"Effects : {effects}"):(""))}",
+                $"  Mana   : {mana}/{maxMana}",
                 $"  Damage : {Damage()}",
                 $"{new string('-',25)}\n",
             };

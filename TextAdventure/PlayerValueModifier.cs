@@ -13,7 +13,7 @@ namespace TextAdventure
 
         public class Health
         {
-            public static Health none = new Health(0, 0, 0, 0);
+            public static Health none = new Health(0, 0, 1, 1);
             public Health(double AMaxHealth,double ARegen,double MMaxHealth, double MRegen)
             {
                 maxHealth = AMaxHealth;
@@ -34,7 +34,7 @@ namespace TextAdventure
 
         public class Mana
         {
-            public static Mana none = new Mana(0, 0, 0, 0, 0, 0);
+            public static Mana none = new Mana(0, 0, 0, 1, 1, 1);
             public Mana(double AMaxMana, double AUsage, double ARegen, double MMaxMana, double MUsage, double MRegen)
             {
                 maxMana = AMaxMana;
@@ -59,7 +59,7 @@ namespace TextAdventure
 
         public class Damage
         {
-            public static Damage none = new Damage(0, 0);
+            public static Damage none = new Damage(0, 1);
             public Damage(double ADamage, double MDamage)
             {
                 damageAddition = ADamage;
@@ -73,7 +73,7 @@ namespace TextAdventure
 
         public class Defence
         {
-            public static Defence none = new Defence(0, 0);
+            public static Defence none = new Defence(0, 1);
             public Defence(double ADefence,double MDefence)
             {
                 defenceAddition = ADefence;
@@ -92,12 +92,12 @@ namespace TextAdventure
         public Damage damageMod;
         public Defence defenceMod;
 
-        public PlayerValueModifier(Health HealthClass, Mana ManaClass, Damage DamageClass, Defence DefenceClass)
+        public PlayerValueModifier(Health HealthClass = null, Mana ManaClass = null, Damage DamageClass = null, Defence DefenceClass = null)
         {
-            healthMod = HealthClass;
-            manaMod = ManaClass;
-            damageMod = DamageClass;
-            defenceMod = DefenceClass;
+            healthMod = HealthClass != null ? HealthClass : Health.none;
+            manaMod = ManaClass != null ? ManaClass : Mana.none;
+            damageMod = DamageClass != null ? DamageClass : Damage.none;
+            defenceMod = DefenceClass != null ? DefenceClass : Defence.none;
         }
 
         public enum ModType
@@ -118,7 +118,7 @@ namespace TextAdventure
         {
             // yea code looks ugly but its so that it doesnt have to run a switch statement for each equipped item of the player
             double final;
-            double addTotal = 0, multiTotal = 0;
+            double addTotal = 0, multiTotal = 1;
             if (values.Count > 0)
             {
                 switch (type)
@@ -130,14 +130,14 @@ namespace TextAdventure
                         foreach (PlayerValueModifier x in values)
                         {
                             addTotal += x.healthMod.maxHealth;
-                            multiTotal += x.healthMod.maxHealthMultiplier;
+                            multiTotal *= x.healthMod.maxHealthMultiplier;
                         }
                         break;
                     case ModType.HealthRegen:
                         foreach (PlayerValueModifier x in values)
                         {
                             addTotal += x.healthMod.regenAddition;
-                            multiTotal += x.healthMod.regenMultiplier;
+                            multiTotal *= x.healthMod.regenMultiplier;
                         }
                         break;
                     #endregion
@@ -146,21 +146,21 @@ namespace TextAdventure
                         foreach (PlayerValueModifier x in values)
                         {
                             addTotal += x.manaMod.maxMana;
-                            multiTotal += x.manaMod.maxManaMultiplier;
+                            multiTotal *= x.manaMod.maxManaMultiplier;
                         }
                         break;
                     case ModType.ManaUsage:
                         foreach (PlayerValueModifier x in values)
                         {
                             addTotal += x.manaMod.usageAddition;
-                            multiTotal += x.manaMod.usageMultiplier;
+                            multiTotal *= x.manaMod.usageMultiplier;
                         }
                         break;
                     case ModType.ManaRegen:
                         foreach (PlayerValueModifier x in values)
                         {
                             addTotal += x.manaMod.regenAddition;
-                            multiTotal += x.manaMod.regenMultiplier;
+                            multiTotal *= x.manaMod.regenMultiplier;
                         }
                         break;
                     #endregion
@@ -169,7 +169,7 @@ namespace TextAdventure
                         foreach (PlayerValueModifier x in values)
                         {
                             addTotal += x.damageMod.damageAddition;
-                            multiTotal += x.damageMod.damageMultiplier;
+                            multiTotal *= x.damageMod.damageMultiplier;
                         }
                         break;
                     #endregion
@@ -178,7 +178,7 @@ namespace TextAdventure
                         foreach (PlayerValueModifier x in values)
                         {
                             addTotal += x.defenceMod.defenceAddition;
-                            multiTotal += x.defenceMod.defenceMultiplier;
+                            multiTotal *= x.defenceMod.defenceMultiplier;
                         }
                         break;
                         #endregion

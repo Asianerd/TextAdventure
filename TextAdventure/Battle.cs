@@ -85,21 +85,19 @@ namespace TextAdventure
 
                             break;
                         case "heal": case "h":
-                            if (Player.Instance.mana >= Player.Instance.HealManaUse())
+                            if (Player.Instance.mana >= PlayerValueModifier.GetFinalMod(Player.Instance.SpellManaUsage(), new List<PlayerValueModifier>(Player.Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.ManaUsage))
                             {
                                 Dialogue.TimedDialogue(new string[] {
-                                    $"$col$2You use {Player.Instance.HealManaUse()} mana to cast a healing spell",
+                                    $"$col$2You use {Player.Instance.SpellManaUsage()} mana to cast a {Player.Instance.currentSpell.name} spell",
                                     $"$col$2Upon application on thyself you feel a surge in energy and a feeling of reassurance of your presence in battle",
-                                    $"$ext$$col$a{Player.Instance.health} => {Player.Instance.health+Player.Instance.healHealthGain} / {Player.Instance.MaxHealth()}HP",
-                                    $"$col$1     {Player.Instance.mana} => {Player.Instance.mana-Player.Instance.HealManaUse()} / {Player.Instance.MaxMana()}MN"
                                 });
-                                Player.Instance.AffectHealth(Player.Instance.healHealthGain);
-                                Player.Instance.AffectMana(-Player.Instance.HealManaUse());
+                                Player.Instance.effects.Add(new Effects(Effects.EffectEnum.Regeneration, 5));
+                                Player.Instance.AffectMana(-Player.Instance.SpellManaUsage());
                             }
                             else
                             {
                                 Dialogue.TimedDialogue(new string[] {
-                                    $"$col$1You didnt have enough mana to cast the spell! Needed {Player.Instance.HealManaUse()}",
+                                    $"$col$1You didnt have enough mana to cast the spell! Needed {Player.Instance.SpellManaUsage()}",
                                 });
                             }
                             break;
@@ -137,7 +135,7 @@ namespace TextAdventure
         Enemy ChooseEnemy(Enemy[] Enemies)
         {
             // From the array, have the user select one and then return that enemy
-            string choice = "";
+            string choice;
             int finalChoice = 0;
             bool success = false;
             while (!success)

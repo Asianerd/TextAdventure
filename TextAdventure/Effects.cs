@@ -22,7 +22,8 @@ namespace TextAdventure
             Poison,
             Weakness,
             Strength,
-            Toughness
+            Toughness,
+            Regeneration
         }
 
         public Effects(EffectEnum EffectType,int Duration)
@@ -36,15 +37,15 @@ namespace TextAdventure
                     value = new PlayerValueModifier(
                         PlayerValueModifier.Health.none,
                         PlayerValueModifier.Mana.none,
-                        new PlayerValueModifier.Damage(0,0.5),
-                        new PlayerValueModifier.Defence(0,0.5)
+                        new PlayerValueModifier.Damage(0, 0.5),
+                        new PlayerValueModifier.Defence(0, 0.5)
                         );
                     break;
                 case EffectEnum.Strength:
                     value = new PlayerValueModifier(
                         PlayerValueModifier.Health.none,
                         PlayerValueModifier.Mana.none,
-                        new PlayerValueModifier.Damage(0,2),
+                        new PlayerValueModifier.Damage(0, 2),
                         PlayerValueModifier.Defence.none
                         );
                     break;
@@ -53,7 +54,15 @@ namespace TextAdventure
                         PlayerValueModifier.Health.none,
                         PlayerValueModifier.Mana.none,
                         PlayerValueModifier.Damage.none,
-                        new PlayerValueModifier.Defence(10,2)
+                        new PlayerValueModifier.Defence(10, 2)
+                        );
+                    break;
+                case EffectEnum.Regeneration:
+                    value = new PlayerValueModifier(
+                        new PlayerValueModifier.Health(0, 5, 0, 5),
+                        PlayerValueModifier.Mana.none,
+                        PlayerValueModifier.Damage.none,
+                        PlayerValueModifier.Defence.none
                         );
                     break;
             }
