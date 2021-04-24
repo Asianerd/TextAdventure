@@ -38,10 +38,12 @@ namespace TextAdventure
             Enemy.PrintStats(Enemies);
             Console.WriteLine();
 
-            Player.Instance.PrintStats();
+            Player.Instance.Regenerate();
             RunEffects();
             Player.Instance.CheckDeath();
-            if(Player.Instance.alive)
+            Player.Instance.PrintStats();
+
+            if (Player.Instance.alive)
             {
                 Dialogue.TimedDialogue(new string[] {
                     "Select an action [attack/shield/heal]"
@@ -91,7 +93,7 @@ namespace TextAdventure
                             if (Player.Instance.mana >= PlayerValueModifier.GetFinalMod(Player.Instance.SpellManaUsage(), new List<PlayerValueModifier>(Player.Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.ManaUsage))
                             {
                                 Dialogue.TimedDialogue(new string[] {
-                                    $"$col$2You use {Player.Instance.SpellManaUsage()} mana to cast a {Player.Instance.currentSpell.name} spell",
+                                    $"$col$2You use {Player.Instance.SpellManaUsage()} mana to cast a {Player.Instance.currentSpell.itemData.name} spell",
                                     $"$col$2Upon application on thyself you feel a surge in energy and a feeling of reassurance of your presence in battle",
                                 });
                                 Player.Instance.effectsEquipped.Add(new Effects(Effects.EffectEnum.Regeneration, 5));

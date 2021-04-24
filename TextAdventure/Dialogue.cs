@@ -11,7 +11,7 @@ namespace TextAdventure
     {
         public static List<ConsoleColor> colors = new List<ConsoleColor>();
         public static string[] hexChars = "0 1 2 3 4 5 6 7 8 9 a b c d e f".Split(' ');
-        public static ConsoleColor[] rarityColors = { ConsoleColor.DarkGray, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Red, ConsoleColor.Yellow };
+        public static ConsoleColor[] rarityColors = { ConsoleColor.Gray, ConsoleColor.Green, ConsoleColor.Cyan, ConsoleColor.Magenta, ConsoleColor.Yellow };
         /*C,U,R,M,L*/
 
         public static void initializeColors()
@@ -63,10 +63,18 @@ namespace TextAdventure
             }
         }
 
-        public static void ColoredPrint(string text, ConsoleColor color)
+        public static void ColoredPrint(string text, ConsoleColor color, bool withLine = true)
         {
             Console.ForegroundColor = color;
-            Console.WriteLine(text);
+            if (withLine)
+            {
+                Console.WriteLine(text);
+            }
+            else
+            {
+                Console.Write(text);
+            }
+
             Console.ForegroundColor = ConsoleColor.White;
         }
 

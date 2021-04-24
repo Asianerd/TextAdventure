@@ -10,7 +10,6 @@ namespace TextAdventure
     {
         // Development related changes:
         /* Intro dialogue delay set to 0
-         * Printing accessories at start of game
          * 'test' command in battle
          */
         public static Player player = Player.Instance;
@@ -18,6 +17,7 @@ namespace TextAdventure
         {
             Dialogue.initializeColors();
             Weapon.initializeWeapons();
+            Accessory.initializeAccessories();
             Loot.initializeLoots();
             Spell.initializeSpells();
             Inventory.initializeInventory();
@@ -30,10 +30,7 @@ namespace TextAdventure
                 "$col$dThis game is a turn-based strategy game",
                 "$col$dThere are various weapons and accessories to be used too.",
             }, 0);
-
-            player.PrintAcessories();
-
-            player.PrintAcessories();
+            
             Enemy[] enemies = new Enemy[] { new Enemy("Spider", 100, 3), new Enemy("Moon Lord", 10, 10, Boss: true) };
             Battle.Instance.Start(enemies);
         }

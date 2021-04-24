@@ -21,9 +21,11 @@ namespace TextAdventure
 
         public double health;
         private double maxHealth = 100;
+        public double healthRegen = 2;
 
         public double mana;
         private double maxMana = 100;
+        public double manaRegen = 10;
 
         private double baseDamage = 5;
 
@@ -89,9 +91,53 @@ namespace TextAdventure
                 return PlayerValueModifier.GetFinalMod(currentSpell.manaUsage, new List<PlayerValueModifier>(Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.ManaUsage);
             }
         }
+
+        public double HealthRegen(bool raw = false)
+        {
+            if(raw)
+            {
+                return healthRegen;
+            }
+            else
+            {
+                return PlayerValueModifier.GetFinalMod(healthRegen, new List<PlayerValueModifier>(Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.HealthRegen);
+            }
+        }
+
+        public double ManaRegen(bool raw = false)
+        {
+            if(raw)
+            {
+                return manaRegen;
+            }
+            else
+            {
+                return PlayerValueModifier.GetFinalMod(manaRegen, new List<PlayerValueModifier>(Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.ManaRegen);
+            }
+        }
         #endregion
 
         #region Affect Data
+        public void Regenerate(float rate = 1)
+        {
+            if (health < maxHealth)
+            {
+                AffectHealth(HealthRegen());
+            }
+            if (mana < maxMana)
+            {
+                AffectMana(ManaRegen());
+            }
+            if(health>maxHealth)
+            {
+                health = maxHealth;
+            }
+            if(mana>maxMana)
+            {
+                mana = maxMana;
+            }
+        }
+
         public void AffectHealth(double amount)
         {
             health += amount;
@@ -124,16 +170,6 @@ namespace TextAdventure
                 $"{new string('-',25)}\n",
             };
             Dialogue.TimedDialogue(stats, 0);
-        }
-
-        public void PrintAcessories()
-        {
-            Console.WriteLine();
-            foreach(Accessory x in accessoriesEquipped)
-            {
-                Console.WriteLine($"{x.itemData.name}");
-            }
-            Console.WriteLine();
         }
         #endregion
     }

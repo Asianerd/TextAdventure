@@ -18,18 +18,18 @@ namespace TextAdventure
         public static void initializeSpells()
         {
             spells = new List<Spell>();
-            spells.Add(new Spell("Regeneration", 50, SpellType.Debuff, new Effects[] { new Effects(Effects.EffectEnum.Regeneration, 10) }));
-            spells.Add(new Spell("Strength", 50, SpellType.Debuff, new Effects[] { new Effects(Effects.EffectEnum.Strength, 4) }));
+            spells.Add(new Spell("Regeneration", Item.RarityEnum.Common, 50, SpellType.Debuff, new Effects[] { new Effects(Effects.EffectEnum.Regeneration, 10) }));
+            spells.Add(new Spell("Strength", Item.RarityEnum.Uncommon, 50, SpellType.Debuff, new Effects[] { new Effects(Effects.EffectEnum.Strength, 4) }));
         }
 
-        public string name;
         public double manaUsage;
         public SpellType type;
         public Effects[] effect;
+        public Item itemData;
 
-        public Spell(string _name, double _manaUsage, SpellType _type, Effects[] _effects)
+        public Spell(string _name, Item.RarityEnum _rarity, double _manaUsage, SpellType _type, Effects[] _effects)
         {
-            name = _name;
+            itemData = new Item(_name, Item.ItemType.Spell, _rarity);
             manaUsage = _manaUsage;
             type = _type;
             effect = _effects;

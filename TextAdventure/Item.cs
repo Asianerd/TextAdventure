@@ -21,8 +21,12 @@ namespace TextAdventure
 
         public enum ItemType
         {
-            Accessory,
+            /*Accessory,
             Weapon,
+            Loot*/
+            Weapon,
+            Accessory,
+            Spell,
             Loot
         }
 
