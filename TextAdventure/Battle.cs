@@ -14,7 +14,10 @@ namespace TextAdventure
             "heal",
             "a",
             "s",
-            "h"
+            "h",
+
+
+            "test" // For testing purposes
         };// Long and short forms
 
         public static Battle Instance = new Battle();
@@ -85,21 +88,24 @@ namespace TextAdventure
 
                             break;
                         case "heal": case "h":
-                            if (Player.Instance.mana >= PlayerValueModifier.GetFinalMod(Player.Instance.SpellManaUsage(), new List<PlayerValueModifier>(Player.Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.ManaUsage))
+                            if (Player.Instance.mana >= PlayerValueModifier.GetFinalMod(Player.Instance.SpellManaUsage(), new List<PlayerValueModifier>(Player.Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.ManaUsage))
                             {
                                 Dialogue.TimedDialogue(new string[] {
                                     $"$col$2You use {Player.Instance.SpellManaUsage()} mana to cast a {Player.Instance.currentSpell.name} spell",
                                     $"$col$2Upon application on thyself you feel a surge in energy and a feeling of reassurance of your presence in battle",
                                 });
-                                Player.Instance.effects.Add(new Effects(Effects.EffectEnum.Regeneration, 5));
+                                Player.Instance.effectsEquipped.Add(new Effects(Effects.EffectEnum.Regeneration, 5));
                                 Player.Instance.AffectMana(-Player.Instance.SpellManaUsage());
                             }
                             else
                             {
                                 Dialogue.TimedDialogue(new string[] {
-                                    $"$col$1You didnt have enough mana to cast the spell! Needed {Player.Instance.SpellManaUsage()}",
+                                    $"$col$9You didnt have enough mana to cast the spell! Needed {Player.Instance.SpellManaUsage()}",
                                 });
                             }
+                            break;
+                        case "test": case "t":
+                            Player.Instance.inventory.DisplayInventory(Inventory.InventoryType.Weapons);
                             break;
                     }
                     Dialogue.ColoredPrint($">{new string('=', 75)}<",ConsoleColor.DarkGray);
@@ -114,12 +120,12 @@ namespace TextAdventure
         void RunEffects()
         {
             string effectMessage = "";
-            foreach (Effects x in Player.Instance.effects.ToArray())
+            foreach (Effects x in Player.Instance.effectsEquipped.ToArray())
             {
                 x.AdvanceAge();
                 if (x.dead)
                 {
-                    Player.Instance.effects.Remove(x);
+                    Player.Instance.effectsEquipped.Remove(x);
                 }
                 else
                 {

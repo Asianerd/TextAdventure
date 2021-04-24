@@ -6,12 +6,21 @@ using System.Threading.Tasks;
 
 namespace TextAdventure
 {
-    class Spell
+    public class Spell
     {
-        public static Spell[] spells = new Spell[] { 
+        /*public static Spell[] spells = new Spell[] { 
             new Spell("Regeneration", 50, SpellType.Debuff, new Effects[] { new Effects(Effects.EffectEnum.Regeneration, 10) }), 
             new Spell("Strength", 50, SpellType.Debuff, new Effects[] { new Effects(Effects.EffectEnum.Strength, 4) })
-        };
+        };*/
+
+        public static List<Spell> spells;
+
+        public static void initializeSpells()
+        {
+            spells = new List<Spell>();
+            spells.Add(new Spell("Regeneration", 50, SpellType.Debuff, new Effects[] { new Effects(Effects.EffectEnum.Regeneration, 10) }));
+            spells.Add(new Spell("Strength", 50, SpellType.Debuff, new Effects[] { new Effects(Effects.EffectEnum.Strength, 4) }));
+        }
 
         public string name;
         public double manaUsage;
@@ -30,7 +39,7 @@ namespace TextAdventure
         {
             foreach (Effects x in effect)
             {
-                Player.Instance.effects.Add(x);
+                Player.Instance.effectsEquipped.Add(x);
             }
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextAdventure
 {
-    class PlayerValueModifier
+    public class PlayerValueModifier
     {
         // Houses the class that contains what player data can be altered
         // Refer to PValues.txt for the values that will be altered

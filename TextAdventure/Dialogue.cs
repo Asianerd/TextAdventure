@@ -11,8 +11,10 @@ namespace TextAdventure
     {
         public static List<ConsoleColor> colors = new List<ConsoleColor>();
         public static string[] hexChars = "0 1 2 3 4 5 6 7 8 9 a b c d e f".Split(' ');
+        public static ConsoleColor[] rarityColors = { ConsoleColor.DarkGray, ConsoleColor.Green, ConsoleColor.Blue, ConsoleColor.Red, ConsoleColor.Yellow };
+        /*C,U,R,M,L*/
 
-        public static void InitColors()
+        public static void initializeColors()
         {
             colors = new List<ConsoleColor>();
             foreach (ConsoleColor x in Enum.GetValues(typeof(ConsoleColor)))

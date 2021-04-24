@@ -13,20 +13,37 @@ namespace TextAdventure
         private Player() { }
 
         public bool alive = true;
-        public List<Accessory> accessories = new List<Accessory>();
-        public List<Effects> effects = new List<Effects>();
+        public List<Accessory> accessoriesEquipped;
+        public List<Effects> effectsEquipped;
         public Weapon currentWeapon;
-        public Spell currentSpell = Spell.spells[0]; // Regeneration spell
+        public Spell currentSpell;
+        public Inventory inventory;
 
-        public double health = 100;
+        public double health;
         private double maxHealth = 100;
 
-        public double mana = 100;
+        public double mana;
         private double maxMana = 100;
 
         private double baseDamage = 5;
 
+        #region Initialization
+        public void initializePlayer()
+        {
+            health = maxHealth;
+            mana = maxMana;
 
+            accessoriesEquipped = new List<Accessory>();
+            effectsEquipped = new List<Effects>();
+
+            currentWeapon = Weapon.weapons[3]; // Copper broadsword
+            currentSpell = Spell.spells[0]; // Regeneration spell
+
+            inventory = Inventory.empty;
+        }
+        #endregion
+
+        #region Data Fetching
         public double MaxHealth(bool raw = false)
         {
             if (raw)
@@ -35,7 +52,7 @@ namespace TextAdventure
             }
             else
             {
-                return PlayerValueModifier.GetFinalMod(health, new List<PlayerValueModifier>(Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.MaxHealth);
+                return PlayerValueModifier.GetFinalMod(health, new List<PlayerValueModifier>(Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.MaxHealth);
             }
         }
         public double MaxMana(bool raw = false)
@@ -46,7 +63,7 @@ namespace TextAdventure
             }
             else
             {
-                return PlayerValueModifier.GetFinalMod(maxMana, new List<PlayerValueModifier>(Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.MaxMana);
+                return PlayerValueModifier.GetFinalMod(maxMana, new List<PlayerValueModifier>(Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.MaxMana);
             }
         }
         public double Damage(bool raw = false)
@@ -57,7 +74,7 @@ namespace TextAdventure
             }
             else
             {
-                return PlayerValueModifier.GetFinalMod(baseDamage,new List<PlayerValueModifier>(Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.Damage);
+                return PlayerValueModifier.GetFinalMod(baseDamage + currentWeapon.damage, new List<PlayerValueModifier>(Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.Damage);
             }
         }
 
@@ -69,10 +86,12 @@ namespace TextAdventure
             }
             else
             {
-                return PlayerValueModifier.GetFinalMod(currentSpell.manaUsage, new List<PlayerValueModifier>(Instance.accessories.Select(n => n.value)), PlayerValueModifier.ModType.ManaUsage);
+                return PlayerValueModifier.GetFinalMod(currentSpell.manaUsage, new List<PlayerValueModifier>(Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.ManaUsage);
             }
         }
+        #endregion
 
+        #region Affect Data
         public void AffectHealth(double amount)
         {
             health += amount;
@@ -83,15 +102,19 @@ namespace TextAdventure
         {
             mana += amount;
         }
+        #endregion
 
+        #region Checks
         public void CheckDeath()
         {
             alive = (health > 0);
         }
+        #endregion
 
+        #region Visual
         public void PrintStats()
         {
-            string effects = string.Join("",Instance.effects.Select(n => $";[{n.age}]:{n.name}; "));
+            string effects = string.Join("",Instance.effectsEquipped.Select(n => $";[{n.age}]:{n.name}; "));
             string[] stats =
             {
                 $"\n{new string('-',25)}",
@@ -106,11 +129,12 @@ namespace TextAdventure
         public void PrintAcessories()
         {
             Console.WriteLine();
-            foreach(Accessory x in accessories)
+            foreach(Accessory x in accessoriesEquipped)
             {
-                Console.WriteLine($"{x.acessoryItem.name}");
+                Console.WriteLine($"{x.itemData.name}");
             }
             Console.WriteLine();
         }
+        #endregion
     }
 }

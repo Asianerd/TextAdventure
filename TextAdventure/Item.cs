@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextAdventure
 {
-    class Item
+    public class Item
     {
         public string name;
         public ItemType type;
@@ -22,7 +22,8 @@ namespace TextAdventure
         public enum ItemType
         {
             Accessory,
-            Weapon
+            Weapon,
+            Loot
         }
 
         public enum RarityEnum

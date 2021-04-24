@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextAdventure
 {
-    class Effects
+    public class Effects
     {
         public static Effects None = new Effects(EffectEnum.None,0);
 
@@ -66,6 +66,7 @@ namespace TextAdventure
                         );
                     break;
             }
+            type = EffectType;
             name = EffectType.ToString();
             age = Duration;
             CheckDeath();
