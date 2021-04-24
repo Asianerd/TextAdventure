@@ -11,6 +11,7 @@ namespace TextAdventure
         // Development related changes:
         /* Intro dialogue delay set to 0
          * Printing accessories at start of game
+         * 'test' command in battle
          */
         public static Player player = Player.Instance;
         static void Main(string[] args)
