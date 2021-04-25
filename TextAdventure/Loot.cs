@@ -22,5 +22,43 @@ namespace TextAdventure
         {
             itemData = new Item(Name, Item.ItemType.Loot, Rarity);
         }
+
+        #region Translation
+        public static List<LootBuffer> DictToList(Dictionary<Loot,int> dict)
+        {
+            List<LootBuffer> final = new List<LootBuffer>();
+            foreach(KeyValuePair<Loot, int> x in dict)
+            {
+                final.Add(new LootBuffer(x));
+            }
+            return final;
+        }
+
+        public static Dictionary<Loot, int> ListToDict(List<LootBuffer> list)
+        {
+            Dictionary<Loot, int> final = new Dictionary<Loot, int>();
+
+            foreach(LootBuffer x in list)
+            {
+                final.Add(x.Key, x.Value);
+            }
+
+            return final;
+        }
+        #endregion
+
+        public class LootBuffer
+        {
+            public Loot Key;
+            public int Value;
+
+            public LootBuffer(KeyValuePair<Loot,int> kvp)
+            {
+                Key = kvp.Key;
+                Value = kvp.Value;
+            }
+
+            public KeyValuePair<Loot, int> GetKVP { get { return new KeyValuePair<Loot, int>(Key, Value); } }
+        }
     }
 }
