@@ -37,13 +37,11 @@ namespace TextAdventure
 
         public void DisplayInventory(InventoryType inventoryType, bool showEquipped = true)
         {
-            Type typeIterated;
             PrintEquipped(inventoryType, showEquipped);
             Console.WriteLine();
             switch (inventoryType)
             {
                 case InventoryType.Weapons:
-                    typeIterated = typeof(Weapon);
                     foreach (var x in Player.Instance.inventory.weapons.Select((item, index) => new { item, index }))
                     {
                         Console.Write($"{x.index}. ");
@@ -51,7 +49,6 @@ namespace TextAdventure
                     }
                     break;
                 case InventoryType.Accessories:
-                    typeIterated = typeof(Accessory);
                     foreach (var x in Player.Instance.inventory.accesories.Select((item, index) => new { item, index }))
                     {
                         Console.Write($"{x.index}. ");
@@ -59,7 +56,6 @@ namespace TextAdventure
                     }
                     break;
                 case InventoryType.Spells:
-                    typeIterated = typeof(Spell);
                     foreach (var x in Player.Instance.inventory.spells.Select((item, index) => new { item, index }))
                     {
                         Console.Write($"{x.index}. ");
@@ -67,7 +63,6 @@ namespace TextAdventure
                     }
                     break;
                 case InventoryType.Loots:
-                    typeIterated = typeof(Loot);
                     foreach(var x in Player.Instance.inventory.loots)
                     {
                         /*if(x.Value == 0)
