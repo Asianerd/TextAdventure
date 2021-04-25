@@ -10,7 +10,6 @@ namespace TextAdventure
     {
         // Development related changes:
         /* Intro dialogue delay set to 0
-         * 'test' command in battle
          */
         public static Player player = Player.Instance;
         static void Main(string[] args)
@@ -26,11 +25,11 @@ namespace TextAdventure
             Dialogue.TimedDialogue(new string[] {
                 "$col$dHello there.",
                 "$col$dWelcome to TextAdventure!",
-                "$col$dPlease enter either 'attack','shield' or 'heal' as moves.",
+                "$col$dPlease enter either 'attack','shield','cast' or 'inventory' as moves.",
                 "$col$dThis game is a turn-based strategy game",
                 "$col$dThere are various weapons and accessories to be used too.",
             }, 0);
-            
+
             Enemy[] enemies = new Enemy[] { new Enemy("Spider", 100, 3), new Enemy("Moon Lord", 10, 10, Boss: true) };
             Battle.Instance.Start(enemies);
         }

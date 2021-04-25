@@ -114,7 +114,7 @@ namespace TextAdventure
             Defence
         }
 
-        public static double GetFinalMod(double baseValue, List<PlayerValueModifier> values,ModType type)
+        public static double GetFinalMod(double baseValue, List<PlayerValueModifier> values, ModType type)
         {
             // yea code looks ugly but its so that it doesnt have to run a switch statement for each equipped item of the player
             double final;

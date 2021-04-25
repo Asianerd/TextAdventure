@@ -80,10 +80,7 @@ namespace TextAdventure
 
         public void CheckDeath()
         {
-            if(age<=0)
-            {
-                dead = true;
-            }
+            dead = !(age > 0);
         }
 
         public string ApplyEffect()
@@ -95,11 +92,11 @@ namespace TextAdventure
                     break;
                 case 1:
                     Player.Instance.AffectHealth(-5);
-                    effectMessage = $"The fire hurts you! {Player.Instance.health + 5} => {Player.Instance.health}/{Player.Instance.health}HP";
+                    effectMessage = $"The fire hurts you! {Player.Instance.health + 5} => {Player.Instance.health}/{Player.Instance.MaxHealth()}HP";
                     break;
                 case 2:
                     Player.Instance.AffectHealth(-3);
-                    effectMessage = $"The poison hurts you! {Player.Instance.health + 3} => {Player.Instance.health}/{Player.Instance.health}HP";
+                    effectMessage = $"The poison hurts you! {Player.Instance.health + 3} => {Player.Instance.health}/{Player.Instance.MaxHealth()}HP";
                     break;
             }
             return effectMessage;

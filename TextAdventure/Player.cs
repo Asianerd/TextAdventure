@@ -54,7 +54,7 @@ namespace TextAdventure
             }
             else
             {
-                return PlayerValueModifier.GetFinalMod(health, new List<PlayerValueModifier>(Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.MaxHealth);
+                return PlayerValueModifier.GetFinalMod(maxHealth, new List<PlayerValueModifier>(Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.MaxHealth);
             }
         }
         public double MaxMana(bool raw = false)
@@ -124,15 +124,16 @@ namespace TextAdventure
             {
                 AffectHealth(HealthRegen());
             }
-            if (mana < maxMana)
-            {
-                AffectMana(ManaRegen());
-            }
-            if(health>maxHealth)
+            else if(health > maxHealth)
             {
                 health = maxHealth;
             }
-            if(mana>maxMana)
+
+            if(mana < maxMana)
+            {
+                AffectMana(ManaRegen());
+            }
+            else if(mana > maxMana)
             {
                 mana = maxMana;
             }
