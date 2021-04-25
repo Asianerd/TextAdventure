@@ -17,7 +17,10 @@ namespace TextAdventure
             "h",
 
 
-            "test" // For testing purposes
+            "inventory",
+            "i",
+            "spells",
+            "s"
         };// Long and short forms
 
         public static Battle Instance = new Battle();
@@ -46,76 +49,63 @@ namespace TextAdventure
             if (Player.Instance.alive)
             {
                 Dialogue.TimedDialogue(new string[] {
-                    "Select an action [attack/shield/heal]"
+                    "Select an action [attack/shield/cast/inventory]"
                 }, 0);
-                string choice = Console.ReadLine();
-                if(validMoves.Contains(choice))
+
+                string _choice = Console.ReadLine();
+                Moves choice = DetermineMove(_choice);
+                
+                switch(choice)
                 {
-                    switch(choice)
-                    {
-                        default:
-                            Enemy enemy;
-                            if (Enemy.RemoveDead(Enemies).Length == 1)
-                            {
-                                enemy = Enemy.RemoveDead(Enemies)[0];
-                            }
-                            else
-                            {
-                                enemy = ChooseEnemy(Enemy.RemoveDead(Enemies));
-                            }
+                    case Moves.Attack:
+                        Enemy enemy = Enemy.RemoveDead(Enemies).Length == 1 ? Enemy.RemoveDead(Enemies)[0] : ChooseEnemy(Enemy.RemoveDead(Enemies));
 
+                        double damageDealt = Player.Instance.Damage();// Change in the future if need be
+                        Dialogue.TimedDialogue(new string[] {
+                            $"$col$eYou dealt {damageDealt} damage to {(enemy.boss? "":"the ")}{enemy.name}!"
+                        });
+                        enemy.AffectHealth(-damageDealt);
 
-
-                            double damageDealt = Player.Instance.Damage();// Change in the future if need be
+                        if(enemy.dead)
+                        {
                             Dialogue.TimedDialogue(new string[] {
-                                $"$col$eYou dealt {damageDealt} damage to {(enemy.boss? "":"the ")}{enemy.name}!"
+                                $"$col$dYou killed {(enemy.boss? "":"the ")}{enemy.name}!",
+                                $"$col$dYou gained absolutely nothing!"
                             });
-                            enemy.AffectHealth(-damageDealt);
+                        }
 
-                            if(enemy.dead)
-                            {
-                                Dialogue.TimedDialogue(new string[] {
-                                    $"$col$dYou killed {(enemy.boss? "":"the ")}{enemy.name}!",
-                                    $"$col$dYou gained absolutely nothing!"
-                                });
-                            }
+                        // Possibly add something to indicate if the attack is powerful or not in the future
+                        break;
+                    case Moves.Shield:
+                        Dialogue.TimedDialogue(new string[] {
+                            $"$col$7You blocked the attack!"
+                        });
 
-                            // Possibly add something to indicate if the attack is powerful or not in the future
-                            break;
-                        case "shield": case "s":
+                        break;
+                    case Moves.Cast:
+                        if (Player.Instance.mana >= PlayerValueModifier.GetFinalMod(Player.Instance.SpellManaUsage(), new List<PlayerValueModifier>(Player.Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.ManaUsage))
+                        {
                             Dialogue.TimedDialogue(new string[] {
-                                $"$col$7You blocked the attack!",
-                                $"$col$8What a pussy"
+                                $"$col$2You use {Player.Instance.SpellManaUsage()} mana to cast a {Player.Instance.currentSpell.itemData.name} spell",
+                                $"$col$2Upon application on thyself you feel a surge in energy and a feeling of reassurance of your presence in battle",
                             });
-
-                            break;
-                        case "heal": case "h":
-                            if (Player.Instance.mana >= PlayerValueModifier.GetFinalMod(Player.Instance.SpellManaUsage(), new List<PlayerValueModifier>(Player.Instance.accessoriesEquipped.Select(n => n.value)), PlayerValueModifier.ModType.ManaUsage))
-                            {
-                                Dialogue.TimedDialogue(new string[] {
-                                    $"$col$2You use {Player.Instance.SpellManaUsage()} mana to cast a {Player.Instance.currentSpell.itemData.name} spell",
-                                    $"$col$2Upon application on thyself you feel a surge in energy and a feeling of reassurance of your presence in battle",
-                                });
-                                Player.Instance.effectsEquipped.Add(new Effects(Effects.EffectEnum.Regeneration, 5));
-                                Player.Instance.AffectMana(-Player.Instance.SpellManaUsage());
-                            }
-                            else
-                            {
-                                Dialogue.TimedDialogue(new string[] {
-                                    $"$col$9You didnt have enough mana to cast the spell! Needed {Player.Instance.SpellManaUsage()}",
-                                });
-                            }
-                            break;
-                        case "test": case "t":
-                            Player.Instance.inventory.DisplayInventory(Inventory.InventoryType.Weapons);
-                            break;
-                    }
-                    Dialogue.ColoredPrint($">{new string('=', 75)}<",ConsoleColor.DarkGray);
+                            Player.Instance.effectsEquipped.Add(new Effects(Effects.EffectEnum.Regeneration, 5));
+                            Player.Instance.AffectMana(-Player.Instance.SpellManaUsage());
+                        }
+                        else
+                        {
+                            Dialogue.TimedDialogue(new string[] {
+                                $"$col$9You didnt have enough mana to cast the spell! Needed {Player.Instance.SpellManaUsage()}",
+                            });
+                        }
+                        break;
+                    case Moves.Inventory:
+                        Player.Instance.inventory.DisplayInventory(ChooseInventory());
+                        break;
+                    default:
+                        break;
                 }
-            }
-            else
-            {
-                Dialogue.TimedDialogue(new string[] { "That was not a valid choice." });
+                Dialogue.ColoredPrint($">{new string('=', 75)}<",ConsoleColor.DarkGray);
             }
         }
 
@@ -131,13 +121,33 @@ namespace TextAdventure
                 }
                 else
                 {
-                    effectMessage += $"{x.ApplyEffect()}\n";
+                    string message = x.ApplyEffect();
+                    if (message != "")
+                    {
+                        effectMessage += $"{message}\n";
+                    }
                 }
             }
 
-            Dialogue.TimedDialogue(new string[] {
-                effectMessage
-            });
+            if (effectMessage != "")
+            {
+                Dialogue.TimedDialogue(new string[] { 
+                    effectMessage
+                });
+            }
+        }
+
+        Moves DetermineMove(string input)
+        {
+            foreach(Moves x in Enum.GetValues(typeof(Moves)))
+            {
+                string lowered = x.ToString().ToLower();
+                if((input == lowered) || (input[0] == lowered[0]))
+                {
+                    return x;
+                }
+            }
+            return Moves.None;
         }
 
         Enemy ChooseEnemy(Enemy[] Enemies)
@@ -169,6 +179,39 @@ namespace TextAdventure
                 }
             }
             return Enemies[finalChoice - 1];
+        }
+
+        Inventory.InventoryType ChooseInventory()
+        {
+            while (true)
+            {
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.Write("Which inventory to view? [weapon/accessory/spell] : ");
+                string choice = Console.ReadLine();
+                Console.WriteLine();
+                foreach (Inventory.InventoryType x in Enum.GetValues(typeof(Inventory.InventoryType)))
+                {
+                    string lowered = x.ToString().ToLower();
+                    if ((choice == lowered) || (choice[0] == lowered[0]))
+                    {
+                        return x;
+                    }
+                }
+                Dialogue.TimedDialogue(new string[] { "$col$cInventory not available. Please re-select." });
+                Console.WriteLine();
+            }
+        }
+
+        public enum Moves
+        {
+            None,
+
+            Attack,
+            Shield,
+            Cast,
+
+            Inventory
         }
     }
 }
