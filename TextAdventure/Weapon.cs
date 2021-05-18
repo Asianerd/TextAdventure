@@ -34,5 +34,12 @@ namespace TextAdventure
             itemData = new Item(Name, Item.ItemType.Weapon, Rarity);
             missChance = MissChance;
         }
+
+        public Weapon(Weapon _weapon)
+        {
+            damage = _weapon.damage;
+            itemData = new Item(_weapon.itemData.name, _weapon.itemData.type, _weapon.itemData.rarity);
+            missChance = _weapon.missChance;
+        }
     }
 }

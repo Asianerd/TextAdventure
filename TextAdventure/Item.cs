@@ -19,6 +19,16 @@ namespace TextAdventure
             rarity = Rarity;
         }
 
+        public string FetchFormattedName(List<Item> items)
+        {
+            return $"{items.IndexOf(this)}. {name}";
+        }
+
+        public string FetchFormattedName(List<Item> items, string keyword)
+        {
+            return $"{items.IndexOf(this)}. {(name.ToLower()).Replace(keyword.ToLower(), "|")}";
+        }
+
         public enum ItemType
         {
             /*Accessory,

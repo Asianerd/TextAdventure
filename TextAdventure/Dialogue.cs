@@ -78,6 +78,35 @@ namespace TextAdventure
             Console.ForegroundColor = ConsoleColor.White;
         }
 
+        public static ConsoleColor ToDarkerVariant(ConsoleColor original)
+        {
+            /* Black DarkBlue DarkGreen DarkCyan DarkRed DarkMagenta DarkYellow Gray DarkGray Blue Green Cyan Red Magenta Yellow White*/
+            // White Blue Green Cyan Red Magenta Yellow Gray
+            // Black DarkBlue DarkGreen DarkCyan DarkRed DarkMagenta DarkYellow DarkGray
+
+            ConsoleColor[] light = { 
+                ConsoleColor.White, ConsoleColor.Blue, ConsoleColor.Green, ConsoleColor.Cyan, ConsoleColor.Red, ConsoleColor.Magenta, ConsoleColor.Yellow, ConsoleColor.Gray
+            };
+            ConsoleColor[] dark = {
+                ConsoleColor.Black, ConsoleColor.DarkBlue, ConsoleColor.DarkGreen, ConsoleColor.DarkCyan, ConsoleColor.DarkRed, ConsoleColor.DarkMagenta, ConsoleColor.DarkYellow, ConsoleColor.DarkGray
+            };
+
+            if(light.Contains(original))
+            {
+                return dark[light.ToList().IndexOf(original)];
+            }
+            else
+            {
+                return light[dark.ToList().IndexOf(original)];
+            }
+        }
+
+        public static string Ask(string question, ConsoleColor color = ConsoleColor.White)
+        {
+            ColoredPrint(question, color);
+            return Console.ReadLine();
+        }
+
         public static string BoxText(string[][] stringsIn, string joiner = " | ",Orientation orientation = Orientation.Vertical)
         {
             string finalString = "";

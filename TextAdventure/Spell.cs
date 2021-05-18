@@ -35,6 +35,14 @@ namespace TextAdventure
             effect = _effects;
         }
 
+        public Spell(Spell _spell)
+        {
+            itemData = new Item(_spell.itemData.name, Item.ItemType.Spell, _spell.itemData.rarity);
+            manaUsage = _spell.manaUsage;
+            type = _spell.type;
+            effect = _spell.effect;
+        }
+
         public void ApplyEffect()
         {
             foreach (Effects x in effect)
