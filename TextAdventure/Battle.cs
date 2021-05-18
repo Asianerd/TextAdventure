@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,21 +9,6 @@ namespace TextAdventure
 {
     class Battle
     {
-        public static string[] validMoves = new string[] {
-            "attack",
-            "shield",
-            "heal",
-            "a",
-            "s",
-            "h",
-
-
-            "inventory",
-            "i",
-            "spells",
-            "s"
-        };// Long and short forms
-
         public static Battle Instance = new Battle();
 
         public void Start(Enemy[] Enemies)
@@ -49,7 +35,7 @@ namespace TextAdventure
             if (Player.Instance.alive)
             {
                 Dialogue.TimedDialogue(new string[] {
-                    "Select an action [attack/shield/cast/inventory]"
+                    $"Select an action [{string.Join("/", (((Moves[])Enum.GetValues(typeof(Moves))).Where(n=>(n!=Moves.None)).Select(n => n.ToString().ToLower()).ToList()))}]"
                 }, 0);
 
                 string _choice = Console.ReadLine();
@@ -187,19 +173,18 @@ namespace TextAdventure
             {
                 Console.WriteLine();
                 Console.WriteLine();
-                Console.Write("Which inventory to view? [weapon/accessory/spell] : ");
+                Console.Write($"Which inventory to access? [{string.Join("/", (((Inventory.InventoryType[])Enum.GetValues(typeof(Inventory.InventoryType))).Where(n => (n != Inventory.InventoryType.Loots)).Select(n => n.ToString().ToLower()).ToList()))}] : ");
                 string choice = Console.ReadLine();
                 Console.WriteLine();
-                foreach (Inventory.InventoryType x in Enum.GetValues(typeof(Inventory.InventoryType)))
+                try
                 {
-                    string lowered = x.ToString().ToLower();
-                    if ((choice == lowered) || (choice[0] == lowered[0]))
-                    {
-                        return x;
-                    }
+                    return (Enum.GetValues(typeof(Inventory.InventoryType)).Cast<Inventory.InventoryType>().ToList()).Where(n => n.ToString()[0] == choice.ToUpper()[0]).ToList()[0];
                 }
-                Dialogue.TimedDialogue(new string[] { "$col$cInventory not available. Please re-select." });
-                Console.WriteLine();
+                catch(Exception e)
+                {
+                    Dialogue.TimedDialogue(new string[] { "$col$cInventory not available. Please re-select." });
+                    Console.WriteLine();
+                }
             }
         }
 
