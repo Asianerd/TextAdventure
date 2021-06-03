@@ -33,27 +33,17 @@ namespace TextAdventure
             }, 0);
 
 
-            int randIncrement = rand.Next(0, 100);
-            for (int i = 0; i < randIncrement; i++)
+            for (int i = 0; i < 50; i++)
             {
-                //player.inventory.accesories.Add(Accessory.accessories[rand.Next(0, (Accessory.accessories.Count))]);
-                //player.inventory.weapons.Add(Weapon.weapons[rand.Next(0, (Weapon.weapons.Count))]);
-                //player.inventory.spells.Add(Spell.spells[rand.Next(0, (Spell.spells.Count))]);
-                player.inventory.accesories.Add(new Accessory(Accessory.accessories[rand.Next(0, (Accessory.accessories.Count))]));
+                player.inventory.accessories.Add(new Accessory(Accessory.accessories[rand.Next(0, (Accessory.accessories.Count))]));
                 player.inventory.weapons.Add(new Weapon(Weapon.weapons[rand.Next(0, (Weapon.weapons.Count))]));
                 player.inventory.spells.Add(new Spell(Spell.spells[rand.Next(0, (Spell.spells.Count))]));
+                player.inventory.loots[Loot.loots[rand.Next(0, Loot.loots.Count)]]++;
             }
 
-            //Weapon testSelectedWeapon = (Weapon)player.inventory.FetchInventoryItem(Inventory.InventoryType.Weapons, player.inventory.weapons);
+            //Item searchItem = Inventory.Search(player.inventory.weapons.Select(n => n.itemData).ToList(), player.currentWeapon.itemData);
 
-            //Console.WriteLine($"{testSelectedWeapon.itemData.name}  : {testSelectedWeapon.itemData.rarity}");
-
-
-            Item searchItem = Inventory.Search(player.inventory.weapons.Select(n => n.itemData).ToList());
-
-            Console.WriteLine($"{searchItem.name}, {searchItem.rarity}, {searchItem.type}");
-
-            //Battle.Instance.Start(new Enemy[] { new Enemy("Spider", 100, 3), new Enemy("Moon Lord", 10, 10, Boss: true) });
+            Battle.Instance.Start(new Enemy[] { new Enemy("Spider", 100, 3), new Enemy("Moon Lord", 10, 10, Boss: true) });
         }
     }
 }

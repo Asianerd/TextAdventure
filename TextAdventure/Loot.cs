@@ -14,6 +14,8 @@ namespace TextAdventure
             loots = new List<Loot>();
             loots.Add(new Loot("Cube", Item.RarityEnum.Common));
             loots.Add(new Loot("Cuboid", Item.RarityEnum.Uncommon));
+            loots.Add(new Loot("Lorem", Item.RarityEnum.Legendary));
+            loots.Add(new Loot("Ipsum", Item.RarityEnum.Mythical));
         }
 
         public Item itemData;
