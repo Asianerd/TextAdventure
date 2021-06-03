@@ -12,7 +12,7 @@ namespace TextAdventure
         {
             empty = new Inventory();
             empty.weapons = new List<Weapon>();
-            empty.accesories = new List<Accessory>();
+            empty.accessories = new List<Accessory>();
             empty.spells = new List<Spell>();
             empty.loots = new Dictionary<Loot, int>();
             foreach(Loot x in Loot.loots)
@@ -31,7 +31,7 @@ namespace TextAdventure
         public static Inventory empty;
 
         public List<Weapon> weapons;
-        public List<Accessory> accesories;
+        public List<Accessory> accessories;
         public List<Spell> spells;
         public Dictionary<Loot, int> loots;
 
@@ -39,18 +39,23 @@ namespace TextAdventure
         {
             PrintEquipped(inventoryType, showEquipped);
             Console.WriteLine();
-            switch (inventoryType)
+/*            switch (inventoryType)
             {
                 // I rather have this mess than having c# be duck-typed
                 case InventoryType.Weapons:
-                    foreach (var x in Player.Instance.inventory.weapons.Select((item, index) => new { item, index }))
+                    *//*foreach (var x in Player.Instance.inventory.weapons.Select((item, index) => new { item, index }))
                     {
-                        Console.Write($"{x.index + 1}. ");
+                        Console.Write($"{x.item.itemData.FetchFormattedName(Player.Instance.currentWeapon.itemData)}");
                         Dialogue.ColoredPrint(x.item.itemData.name, GetRarityColor(x.item.itemData));
+                    }*//*
+
+                    foreach(Item x in Player.Instance.inventory.weapons.Select(x=>x.itemData))
+                    {
+                        Dialogue.ColoredPrint(x.FetchFormattedName(Player.Instance.inventory.weapons.Select(y => y.itemData).ToList(), Player.Instance.currentWeapon.itemData), GetRarityColor(x));
                     }
                     break;
                 case InventoryType.Accessories:
-                    foreach (var x in Player.Instance.inventory.accesories.Select((item, index) => new { item, index }))
+                    foreach (var x in Player.Instance.inventory.accessories.Select((item, index) => new { item, index }))
                     {
                         Console.Write($"{x.index + 1}. ");
                         Dialogue.ColoredPrint(x.item.itemData.name, GetRarityColor(x.item.itemData));
@@ -66,10 +71,10 @@ namespace TextAdventure
                 case InventoryType.Loots:
                     foreach(var x in Player.Instance.inventory.loots)
                     {
-                        /*if(x.Value == 0)
+                        *//*if(x.Value == 0)
                         {
                             continue;
-                        }*/
+                        }*//*
 
                         if(x.Value != 0)
                         {
@@ -79,6 +84,49 @@ namespace TextAdventure
                     break;
                 default:
                     return;
+            }*/
+            if (inventoryType != InventoryType.Loots)
+            {
+                List<Item> wantedItems = new List<Item>();
+                List<Item> equippedItems = new List<Item>();
+                switch (inventoryType)
+                {
+                    case InventoryType.Weapons:
+                        wantedItems = Player.Instance.inventory.weapons.Select(x => x.itemData).ToList();
+                        equippedItems.Add(Player.Instance.currentWeapon.itemData);
+                        break;
+                    case InventoryType.Accessories:
+                        wantedItems = Player.Instance.inventory.accessories.Select(x => x.itemData).ToList();
+                        foreach(Item i in Player.Instance.accessoriesEquipped.Select(x=>x.itemData))
+                        {
+                            equippedItems.Add(i);
+                        }
+                        break;
+                    case InventoryType.Spells:
+                        wantedItems = Player.Instance.inventory.spells.Select(x => x.itemData).ToList();
+                        equippedItems.Add(Player.Instance.currentSpell.itemData);
+                        break;
+               }
+                foreach(Item x in wantedItems)
+                {
+                    Dialogue.ColoredPrint(x.FetchFormattedName(wantedItems, equippedItems), GetRarityColor(x));
+                        //Dialogue.ColoredPrint(x.FetchFormattedName(Player.Instance.inventory.weapons.Select(y => y.itemData).ToList(), Player.Instance.currentWeapon.itemData), GetRarityColor(x));
+                }
+            }
+            else
+            {
+                foreach (var x in Player.Instance.inventory.loots)
+                {
+                    /*if(x.Value == 0)
+                        {
+                        continue;
+                    }*/
+
+                    if (x.Value != 0)
+                    {
+                        Dialogue.ColoredPrint($"{x.Key.itemData.name} : {x.Value}", GetRarityColor(x.Key.itemData));
+                    }
+                }
             }
             Console.WriteLine();
             Console.WriteLine();
@@ -118,7 +166,7 @@ namespace TextAdventure
             }
         }
 
-        public static Item Search(List<Item> items)
+        public static Item Search(List<Item> items, Item equippedItem)
         {
             Item final;
             WriteAll();
@@ -132,14 +180,15 @@ namespace TextAdventure
 
                 if (int.TryParse(searchKeyword, out index))
                 {
-                    if (index > 0 && index < items.Count)
+                    index--;
+                    if (index >= 0 && index < items.Count)
                     {
                         final = items[index];
                         break;
                     }
                 }
 
-                foreach (var x in items.Where(n => n.name.ToLower().Contains(searchKeyword.ToLower())).Select(n => new Tuple<Item, string>(n, n.FetchFormattedName(items))))
+                foreach (var x in items.Where(n => n.name.ToLower().Contains(searchKeyword.ToLower())).Select(n => new Tuple<Item, string>(n, n.FetchFormattedName(items, equippedItem))))
                 {
                     HighlightKeyword(x.Item1, searchKeyword, items);
                 }
@@ -149,7 +198,7 @@ namespace TextAdventure
 
             void WriteAll()
             {
-                foreach (var x in items.Select(n => new Tuple<Item, string>(n, n.FetchFormattedName(items))))
+                foreach (var x in items.Select(n => new Tuple<Item, string>(n, n.FetchFormattedName(items, equippedItem))))
                 {
                     //Console.WriteLine(x.Item2);
                     Dialogue.ColoredPrint(x.Item2, Dialogue.rarityColors[(int)x.Item1.rarity]);
