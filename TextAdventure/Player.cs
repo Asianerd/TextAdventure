@@ -38,10 +38,13 @@ namespace TextAdventure
             accessoriesEquipped = new List<Accessory>();
             effectsEquipped = new List<Effects>();
 
-            currentWeapon = Weapon.weapons[3]; // Copper broadsword
+            inventory = Inventory.empty;
+
+            //currentWeapon = Weapon.weapons[3];
+            inventory.weapons.Add(new Weapon(Weapon.weapons[1]));
+            currentWeapon = inventory.weapons[0];
             currentSpell = Spell.spells[0]; // Regeneration spell
 
-            inventory = Inventory.empty;
         }
         #endregion
 
